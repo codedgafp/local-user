@@ -147,7 +147,7 @@ if (null !== $csvformdata) {
         // Preview array.
         $preview = [
             'list' => [], // Cleaned list of accounts.
-            'validlines' => 0, // Number of lines without error.
+            'useridentified' => 0, // Number of identified user
             'validforcreation' => 0, // Number of lines that will create an account.
             'validforreactivation' => [], // Valid accounts for reactivation.
         ];
@@ -190,7 +190,7 @@ if (null !== $csvformdata) {
 
         // Display the report.
         $out .= html_writer::alist([
-            get_string('identified_users', 'local_mentor_core', $preview['validlines']),
+            get_string('identified_users', 'local_mentor_core', $preview['useridentified']),
             get_string('account_creation_number', 'local_mentor_core', $preview['validforcreation']),
             get_string('account_reactivation_number', 'local_mentor_core', count($preview['validforreactivation'])),
             get_string('errors_number', 'local_mentor_core', $nberror),
