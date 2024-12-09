@@ -41,22 +41,34 @@ class entity_controller extends controller_base {
     /**
      * Execute action
      *
-     * @return array
+     * @return object
      */
     public function execute() {
 
         try {
-
             $action = $this->get_param('action');
-
             switch ($action) {
                 case 'get_members' :
-                    $entityid = $this->get_param('entityid', PARAM_INT);
-                    $suspendedusers = $this->get_param('suspendedusers', PARAM_RAW);
-                    $externalusers = $this->get_param('externalusers', PARAM_RAW);
-                    $mainonly = $this->get_param('mainonly', PARAM_BOOL, false);
-
-                    return $this->success($this->get_members($entityid, $suspendedusers, $externalusers, $mainonly));
+                    // Get count all members record by entity.
+                    $data = new \stdClass();
+                    $data->status = false;
+                    $data->datefrom = false;
+                    $data->dateto = false;
+                    $data->search = false;
+                    $data->order = false;
+                    $data->entityid = $this->get_param('entityid', PARAM_INT);
+                    $data->suspendedusers = $this->get_param('suspendedusers', PARAM_RAW);
+                    $data->externalusers = $this->get_param('externalusers', PARAM_RAW);
+                    $data->mainonly = $this->get_param('mainonly', PARAM_BOOL, false);
+                    $data->length = $this->get_param('length', PARAM_INT, null);
+                    $data->start = $this->get_param('start', PARAM_INT, null);
+                    $data->search = $this->get_param('search', PARAM_RAW, null);
+                    $data->data = $this->get_members($data);
+                    // Count Members
+                    $data->recordsFiltered = $this->get_members_count($data, true);
+                    $data->recordsTotal = $this->get_members_count($data, false);
+                    
+                    return $data;
                 default:
                     break;
             }
@@ -64,28 +76,27 @@ class entity_controller extends controller_base {
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
-
     }
 
     /**
      * Get entity members
      *
-     * @param int $entityid
+     * @param $data
      * @return array
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public static function get_members($entityid, $suspendedusers, $externalusers, $mainonly = false) {
-        $entity = entity_api::get_entity($entityid);
-        $members = array_values($entity->get_members($suspendedusers, $externalusers));
-
+    public static function get_members($data) {
+        $entity = entity_api::get_entity(entityid: $data->entityid);
+        $members = array_values($entity->get_members($data));
+        
         $entities = [];
 
         // Get other data.
         foreach ($members as $key => $member) {
 
             if (!isset($entities[$member->mainentity])) {
-                $entities[$member->mainentity] = entity_api::get_entity_by_name($member->mainentity, $mainonly);
+                $entities[$member->mainentity] = entity_api::get_entity_by_name($member->mainentity, $data->mainonly);
             }
 
             $member->entityshortname
@@ -94,10 +105,15 @@ class entity_controller extends controller_base {
                 '';
 
             // Check if user has capability to update user profile.
-            $members[$key]->hasconfigaccess = $member->can_edit_profile();
+            $members[$key]->hasconfigaccess = $member->can_edit_profile(); 
         }
-
         return $members;
+    }
+
+    public static function get_members_count($data, $enablefilters){
+        $entity = entity_api::get_entity(entityid: $data->entityid);
+        return $entity->get_members_count($data, $enablefilters);
+
     }
     
 }
