@@ -143,3 +143,7 @@ $string['task_user_deleted_log'] = 'Suppression de l’utilisateur : {$a->userid
 
 $string['task_error_header'] = 'Les comptes utisateurs en erreurs :';
 $string['task_error_line'] = ' * {$a->userid} ; {$a->email} ; erreur durant l\'appel : {$a->message}';
+
+
+$string['import_queued'] = 'L\'importation de l\'utilisateur a été mise en file d\'attente et sera traitée sous peu.';
+$string['importusers'] = 'Import utilisateurs';

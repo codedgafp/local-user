@@ -111,8 +111,28 @@ if (null !== $importusersformdata) {
     // List of users to reactivate.
     $userstoreactivate = json_decode($importusersformdata->userstoreactivate, true);
 
-    // Import users.
-    local_mentor_core_create_users_csv($users, $userstoreactivate, $entityid, $importusersformdata->addtoentity, $areexternals);
+    // Create adhoc task
+    $task = new \local_user\task\importcsv_users_task();
+    
+    // Set custom data for the task
+    $task->set_custom_data((object)[
+        'users' => $users,
+        'userstoreactivate' => $userstoreactivate,
+        'entityid' => $entityid,
+        'addtoentity' => $importusersformdata->addtoentity,
+        'areexternals' => $areexternals,
+    ]);
+        
+    // Queue the task for immediate execution
+    \core\task\manager::queue_adhoc_task($task);
+        
+    // Redirect with success message
+    redirect(
+        new moodle_url('/course/view.php', ['id' => $usercourse['id']]),
+        get_string('import_queued', 'local_user'),
+        null,
+        \core\output\notification::NOTIFY_SUCCESS
+    );
 }
 
 // Validate given data from CSV.
