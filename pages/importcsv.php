@@ -111,25 +111,24 @@ if (null !== $importusersformdata) {
     // List of users to reactivate.
     $userstoreactivate = json_decode($importusersformdata->userstoreactivate, true);
 
-    // Create adhoc task
-    $task = new \local_user\task\importcsv_users_task();
-    
-    // Set custom data for the task
-    $task->set_custom_data((object)[
-        'users' => $users,
-        'userstoreactivate' => $userstoreactivate,
-        'entityid' => $entityid,
-        'addtoentity' => $importusersformdata->addtoentity,
-        'areexternals' => $areexternals,
+    // Create import users task
+    $adhoctask = new \local_user\task\create_users_csv();
+
+    // Set data
+    $adhoctask->set_custom_data([
+        "users" => $users, 
+        "userstoreactivate" => $userstoreactivate,
+        "entityid" => $entityid,
+        "importusersformdata_addtoentity" => $importusersformdata->addtoentity,
+        "areexternals" => $areexternals
     ]);
-        
-    // Queue the task for immediate execution
-    \core\task\manager::queue_adhoc_task($task);
-        
-    // Redirect with success message
+
+    // Prepare import users task.
+    \core\task\manager::queue_adhoc_task($adhoctask);
+
     redirect(
-        new moodle_url('/course/view.php', ['id' => $usercourse['id']]),
-        get_string('import_queued', 'local_user'),
+        $CFG->wwwroot . "/local/entities/index.php",
+        get_string('import_inprogress', 'local_mentor_core'),
         null,
         \core\output\notification::NOTIFY_SUCCESS
     );
