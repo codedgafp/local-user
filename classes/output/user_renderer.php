@@ -146,6 +146,11 @@ class user_renderer extends \plugin_renderer_base implements \format_edadmin\out
         $params['manageurl'] = $manageurl;
         $params['courseid'] = $course->id;
 
+        // Render the domains button
+        $categoriesDomainsRenderer = $this->page->get_renderer('local_categories_domains', 'categories_domains');
+        $manageDomainsButtonHtml = $categoriesDomainsRenderer->render_manage_domains_button($entity->id);
+        $params['manageDomainsButtonHtml'] = $manageDomainsButtonHtml;
+        
         return $this->render_from_template($template, $params);
     }
 }
