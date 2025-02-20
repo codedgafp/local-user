@@ -55,7 +55,7 @@ class entity_controller extends controller_base {
                     $data->datefrom = false;
                     $data->dateto = false;
                     $data->search = false;
-                    $data->order = false;
+                    $data->order = $this->get_param('order', PARAM_RAW, null);
                     $data->entityid = $this->get_param('entityid', PARAM_INT);
                     $data->suspendedusers = $this->get_param('suspendedusers', PARAM_RAW);
                     $data->externalusers = $this->get_param('externalusers', PARAM_RAW);
@@ -87,7 +87,7 @@ class entity_controller extends controller_base {
      * @throws \moodle_exception
      */
     public static function get_members($data) {
-        $entity = entity_api::get_entity(entityid: $data->entityid);
+        $entity = entity_api::get_entity($data->entityid);
         $members = array_values($entity->get_members($data));
         
         $entities = [];
