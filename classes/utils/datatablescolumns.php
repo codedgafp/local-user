@@ -8,7 +8,7 @@ class datatablescolumns
         0 => "u.lastname",
         1 => "u.firstname",
         2 => "u.email",
-        3 => "mainentity",
+        3 => "idnumber",
         4 => "u.lastaccess",
         'default' => "u.email"
     ];
