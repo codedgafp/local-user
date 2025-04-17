@@ -65,13 +65,11 @@ class importusers_form extends moodleform {
      * @param bool $editable
      * @param null $ajaxformdata
      */
-    public function __construct($users = [], $userstoreactivate = [], $addtoentity = 0, $action = null, $areexternals = false, $customdata = null,
+    public function __construct($users = [], $userstoreactivate = [], $action = null, $customdata = null,
         $method = 'post', $target = '', $attributes = null, $editable = true, $ajaxformdata = null) {
 
         $this->users = $users;
         $this->userstoreactivate = $userstoreactivate;
-        $this->addtoentity = $addtoentity;
-        $this->areexternals = $areexternals;
 
         parent::__construct($action, $customdata, $method, $target, $attributes, $editable, $ajaxformdata);
     }
@@ -89,14 +87,6 @@ class importusers_form extends moodleform {
         $mform->addElement('hidden', 'userstoreactivate', 'userstoreactivate');
         $mform->setType('userstoreactivate', PARAM_RAW);
         $mform->setDefault('userstoreactivate', json_encode($this->userstoreactivate));
-
-        $mform->addElement('hidden', 'addtoentity', 'users');
-        $mform->setType('addtoentity', PARAM_INT);
-        $mform->setDefault('addtoentity', $this->addtoentity);
-        
-        $mform->addElement('hidden', 'areexternals', 'users');
-        $mform->setType('areexternals', PARAM_BOOL);
-        $mform->setDefault('areexternals', $this->areexternals);
 
         $this->add_action_buttons(false, get_string('validateimport', 'local_user'));
     }

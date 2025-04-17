@@ -41,12 +41,6 @@ require_login();
 // Require entity id.
 $entityid = required_param('entityid', PARAM_INT);
 
-// True id assign external user role.
-$areexternals = optional_param('areexternals', false, PARAM_BOOL);
-
-// Check if the users must be created in the entity.
-$addtoentity = optional_param('addtoentity', 0, PARAM_INT);
-
 // Get entity.
 $entity = \local_mentor_core\entity_api::get_entity($entityid);
 
@@ -119,8 +113,8 @@ if (null !== $importusersformdata) {
         "users" => $users, 
         "userstoreactivate" => $userstoreactivate,
         "entityid" => $entityid,
-        "importusersformdata_addtoentity" => $importusersformdata->addtoentity,
-        "areexternals" => $areexternals
+        "importusersformdata_addtoentity" => 0, //TO DO : delete in further tasks : task2
+        "areexternals" => false //TO DO : delete in further tasks: task2
     ]);
 
     // Prepare import users task.
@@ -174,8 +168,8 @@ if (null !== $csvformdata) {
         // Other data.
         $other = [
             'entityid' => $entity->id,
-            'addtoentity' => $csvformdata->addtoentity,
-            'areexternals' => $areexternals
+            'addtoentity' => 0, //TO DO : delete in further tasks : task2
+            'areexternals' => false //TO DO : delete in further tasks : task2
         ];
 
         // Build preview and errors array.
@@ -199,7 +193,7 @@ if (null !== $csvformdata) {
             $out .= html_writer::table($previewstable);
 
             // Add validated data into the import users form.
-            $importusersform = new importusers_form($preview['list'], $preview['validforreactivation'], $addtoentity, $url, $areexternals);
+            $importusersform = new importusers_form($preview['list'], $preview['validforreactivation'], $url);
         }
 
         // Preview report.
