@@ -44,16 +44,6 @@ class importusers_form extends moodleform {
     private $userstoreactivate;
 
     /**
-     * @var $addtoentity 1 if the new users must be added into the entity.
-     */
-    private $addtoentity;
-    
-    /**
-     * @var $areexternals true if the new users must have external users role assigned.
-     */
-    private $areexternals;
-
-    /**
      * importusers_form constructor.
      *
      * @param array $users
