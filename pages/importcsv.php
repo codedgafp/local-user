@@ -112,9 +112,7 @@ if (null !== $importusersformdata) {
     $adhoctask->set_custom_data([
         "users" => $users, 
         "userstoreactivate" => $userstoreactivate,
-        "entityid" => $entityid,
-        "importusersformdata_addtoentity" => 0, //TO DO : delete in further tasks : task2
-        "areexternals" => false //TO DO : delete in further tasks: task2
+        "entityid" => $entityid
     ]);
 
     // Prepare import users task.
@@ -167,9 +165,7 @@ if (null !== $csvformdata) {
 
         // Other data.
         $other = [
-            'entityid' => $entity->id,
-            'addtoentity' => 0, //TO DO : delete in further tasks : task2
-            'areexternals' => false //TO DO : delete in further tasks : task2
+            'entityid' => $entity->id
         ];
 
         // Build preview and errors array.

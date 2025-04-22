@@ -38,9 +38,7 @@ class create_users_csv extends \core\task\adhoc_task {
         $requiredfields = [
             'users',
             'userstoreactivate', 
-            'entityid',
-            'importusersformdata_addtoentity',
-            'areexternals'
+            'entityid'
         ];
 
         // Check all required fields.
@@ -53,9 +51,7 @@ class create_users_csv extends \core\task\adhoc_task {
         local_mentor_core_create_users_csv(
             json_decode(json_encode($data->users), true), 
             $data->userstoreactivate, 
-            $data->entityid, 
-            $data->importusersformdata_addtoentity, 
-            $data->areexternals
+            $data->entityid
         );
 
         return true;
