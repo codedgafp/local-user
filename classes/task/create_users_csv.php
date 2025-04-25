@@ -50,7 +50,7 @@ class create_users_csv extends \core\task\adhoc_task {
 
         local_mentor_core_create_users_csv(
             json_decode(json_encode($data->users), true), 
-            $data->userstoreactivate, 
+            json_decode(json_encode($data->userstoreactivate), true),
             $data->entityid
         );
 
