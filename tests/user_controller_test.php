@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
+use local_user\helper\testhelper;
 
 require_once($CFG->dirroot . '/local/mentor_core/classes/controllers/front_controller.php');
 
@@ -65,10 +66,10 @@ class local_user_controller_testcase extends advanced_testcase {
         $this->reset_singletons();
         self::setAdminUser();
 
-        $DB->delete_records('user_info_field');
-
+        testhelper::create_default_entity($this);
         $user = $this->getDataGenerator()->create_user();
-
+        
+        $DB->delete_records('user_info_field');
         // With set user.
 
         // Not preference.
