@@ -27,6 +27,8 @@ namespace local_user;
 
 use local_mentor_core\controller_base;
 use local_mentor_core\profile_api;
+use local_mentor_core\database_interface;
+use local_mentor_core\entity;
 
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/local/user/lib.php');
@@ -82,13 +84,14 @@ class user_controller extends controller_base {
                     $lastname = $this->get_param('lastname', PARAM_TEXT);
                     $firstname = $this->get_param('firstname', PARAM_TEXT);
                     $email = $this->get_param('mail', PARAM_TEXT);
-                    $entity = $this->get_param('entity', PARAM_TEXT, null);
+                    $courseid =  $this->get_param('courseid', PARAM_TEXT, null);
+                    $mentorcoredi = new database_interface;
+                    $entityobject = $mentorcoredi->get_course_category_by_course_id($courseid);
+                    $entity = new entity($entityobject->id);
                     $secondaryentities = $this->get_param('secondaryentities', PARAM_RAW, []);
                     $region = $this->get_param('region', PARAM_TEXT, null);
                     $isexternal = $this->get_param('isexternal', PARAM_BOOL);
-                    $courseid = $this->get_param('courseid', PARAM_TEXT, null);
-                    return $this->success($this->create_and_add_user($lastname, $firstname, $email, $entity, $secondaryentities,
-                        $region, $isexternal, $courseid));
+                    return $this->success($this->create_and_add_user($lastname, $firstname, $email, $entity, $secondaryentities, $region, $isexternal, $courseid));
                 case 'set_user_preference' :
                     $userid = $this->get_param('userid', PARAM_INT, null);
                     $preferencename = $this->get_param('preferencename', PARAM_TEXT);
@@ -138,14 +141,18 @@ class user_controller extends controller_base {
      * @param string $lastname
      * @param string $firstname
      * @param string $email
-     * @param string|int|entity|null $entity
-     * @param string|int|null $region
+     * @param string|int|entity $entity
+     * @param array $secondaryentities
+     * @param string $region
+     * @param bool $isexternal
+     * @param int $courseid
      * @return bool|int
      * @throws \coding_exception
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public static function create_and_add_user($lastname, $firstname, $email, $entity, $secondaryentities, $region, $isexternal, $courseid) {
+    public static function create_and_add_user(string $lastname, string $firstname, string $email, string|int|entity $entity = null, array $secondaryentities = [], string $region = null, bool $isexternal = false, int $courseid = null): bool|int
+    {
         return profile_api::create_and_add_user($lastname, $firstname, $email, $entity, $secondaryentities, $region, null, $isexternal, $courseid);
     }
 

@@ -68,8 +68,9 @@ class local_user_controller_testcase extends advanced_testcase {
 
         testhelper::create_default_entity($this);
         $user = $this->getDataGenerator()->create_user();
-        
+
         $DB->delete_records('user_info_field');
+
         // With set user.
 
         // Not preference.
