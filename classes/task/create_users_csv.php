@@ -32,7 +32,7 @@ class create_users_csv extends \core\task\adhoc_task {
 
         require_once $CFG->dirroot . '/local/mentor_core/lib.php';
 
-        $data = $this->get_custom_data();
+        $data = $this->get_custom_data(); 
 
         // Define all required custom data fields.
         $requiredfields = [
@@ -48,11 +48,13 @@ class create_users_csv extends \core\task\adhoc_task {
             }
         }
 
-        local_mentor_core_create_users_csv(
+        $reportData = local_mentor_core_create_users_csv(
             json_decode(json_encode($data->users), true), 
             json_decode(json_encode($data->userstoreactivate), true),
             $data->entityid
         );
+        //TO DO : uncommit when merge MEN-611
+        //local_mentor_core_send_report($data->csvcontent , $reportData , $data->delimiter_name,$data->filename, $data->user_id);
 
         return true;
     }

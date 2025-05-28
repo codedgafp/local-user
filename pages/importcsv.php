@@ -98,7 +98,6 @@ $importusersformdata = $importusersform->get_data();
 
 // Import users with validated data.
 if (null !== $importusersformdata) {
-
     // List of users to import.
     $users = json_decode($importusersformdata->users, true);
 
@@ -112,8 +111,17 @@ if (null !== $importusersformdata) {
     $adhoctask->set_custom_data([
         "users" => $users, 
         "userstoreactivate" => $userstoreactivate,
-        "entityid" => $entityid
+        "entityid" => $entityid,
+        "csvcontent" => $_SESSION['import_csv_raw_content'] ?? '',
+        "delimiter_name" => $_SESSION['import_csv_delimiter_name'] ?? '',
+        "filename" => $_SESSION['import_csv_filename'] ?? '',
+        "user_id" => $USER->id
     ]);
+
+    // Cleanup after use
+    unset($_SESSION['import_csv_raw_content']); 
+    unset($_SESSION['import_csv_delimiter_name']); 
+    unset($_SESSION['import_csv_filename']); 
 
     // Prepare import users task.
     \core\task\manager::queue_adhoc_task($adhoctask);
@@ -168,6 +176,25 @@ if (null !== $csvformdata) {
             'entityid' => $entity->id
         ];
 
+        // Get the uploaded file name from the filepicker element.
+        $draftitemid = $csvmform->get_data()->userscsv;
+        $usercontext = context_user::instance($USER->id);
+        $fs = get_file_storage();
+        $files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'id DESC', false);
+        $filename = '';
+        if ($files) {
+            $file = reset($files);
+            $filename = $file->get_filename();
+        }
+
+        if (!empty($content)) {
+            // Stocke le contenu dans la session pour l'utiliser plus tard.
+            $_SESSION['import_csv_raw_content'] = $content;
+   
+        }
+        $_SESSION['import_csv_delimiter_name'] = $csvformdata->delimiter_name;
+        $_SESSION['import_csv_filename'] = $filename;
+        
         // Build preview and errors array.
         $hasfatalerrors = local_mentor_core_validate_users_csv($content, $csvformdata->delimiter_name, null, $preview,
             $errors, $warnings, $other);
