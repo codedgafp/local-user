@@ -53,8 +53,8 @@ class create_users_csv extends \core\task\adhoc_task {
             json_decode(json_encode($data->userstoreactivate), true),
             $data->entityid
         );
-        //TO DO : uncommit when merge MEN-611
-        //local_mentor_core_send_report($data->csvcontent , $reportData , $data->delimiter_name,$data->filename, $data->user_id);
+        
+        local_mentor_core_send_report($data->csvcontent , $reportData , $data->delimiter_name,$data->filename, $data->user_id);
 
         return true;
     }
