@@ -88,10 +88,9 @@ class user_controller extends controller_base {
                     $mentorcoredi = new database_interface;
                     $entityobject = $mentorcoredi->get_course_category_by_course_id($courseid);
                     $entity = new entity($entityobject->id);
-                    $secondaryentities = $this->get_param('secondaryentities', PARAM_RAW, []);
                     $region = $this->get_param('region', PARAM_TEXT, null);
                     $isexternal = $this->get_param('isexternal', PARAM_BOOL);
-                    return $this->success($this->create_and_add_user($lastname, $firstname, $email, $entity, $secondaryentities, $region, $isexternal, $courseid));
+                    return $this->success($this->create_and_add_user($lastname, $firstname, $email, $entity, $region, $isexternal, $courseid));
                 case 'set_user_preference' :
                     $userid = $this->get_param('userid', PARAM_INT, null);
                     $preferencename = $this->get_param('preferencename', PARAM_TEXT);
@@ -151,9 +150,9 @@ class user_controller extends controller_base {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public static function create_and_add_user(string $lastname, string $firstname, string $email, string|int|entity $entity = null, array $secondaryentities = [], string $region = null, bool $isexternal = false, int $courseid = null): bool|int
+    public static function create_and_add_user(string $lastname, string $firstname, string $email, string|int|entity $entity = null, string $region = null, bool $isexternal = false, int $courseid = null): bool|int
     {
-        return profile_api::create_and_add_user($lastname, $firstname, $email, $entity, $secondaryentities, $region, null, $isexternal, $courseid);
+        return profile_api::create_and_add_user($lastname, $firstname, $email, $entity, $region, null, $isexternal, $courseid);
     }
 
     /**
