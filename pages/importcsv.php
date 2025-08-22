@@ -79,11 +79,7 @@ $params = [
 // Require JS.
 $PAGE->requires->js_call_amd('local_mentor_core/importcsv', 'init', $params);
 
-// Output content.
-$out = '';
 
-echo $OUTPUT->header();
-echo $OUTPUT->heading($title);
 
 // Anchor directly to the import report.
 $anchorurl = new moodle_url('/local/user/pages/importcsv.php', ['entityid' => $entityid], 'import-reports');
@@ -133,7 +129,11 @@ if (null !== $importusersformdata) {
         \core\output\notification::NOTIFY_SUCCESS
     );
 }
+// Output content.
+$out = '';
 
+echo $OUTPUT->header();
+echo $OUTPUT->heading($title);
 // Validate given data from CSV.
 if (null !== $csvformdata) {
     $out .= $csvmform->render();
