@@ -111,6 +111,7 @@ Pour récupérer ou créer votre mot de passe, vous pouvez utiliser le lien : <a
 Pour plus de détails, veuillez consulter la <a href="{$a->faqurl}">FAQ</a>.';
 
 $string['task_never_logged_user_deleted'] = 'Suppression de comptes utilisateurs jamais connectés - Supression';
+$string['task_inactive_enrolment_external_user_deleted'] = 'Suppression des comptes externes sans inscription depuis plus de 30 jours';
 
 $string['task_suspended_user_deleted'] = 'Suppression de comptes utilisateurs suspendus';
 

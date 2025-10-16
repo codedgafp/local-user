@@ -21,6 +21,8 @@
 
 namespace local_user\helper;
 
+use local_mentor_core\entity;
+
 defined('MOODLE_INTERNAL') || die;
 
 class testhelper
@@ -51,5 +53,24 @@ class testhelper
         \local_mentor_core\entity_api::create_entity(['name' => $entityname, 'shortname' => $entityname]);
 
         if ($userid != null && !is_siteadmin($userid)) $test::setUser($userid);
+    }
+
+    /**
+     * Summary of create_entity
+     * @param $test current class test
+     * @return entity
+     */
+    public static function create_entity($test): entity
+    {
+        global $USER;
+
+        $userid = !empty($USER->id) ? $USER->id : null;
+
+        if (!$userid || !is_siteadmin($userid)) $test::setAdminUser();
+
+        $entityid = \local_mentor_core\entity_api::create_entity(['name' => 'Entity name', 'shortname' => 'Entity name']);
+        $entity = \local_mentor_core\entity_api::get_entity($entityid);
+
+        return $entity;
     }
 }

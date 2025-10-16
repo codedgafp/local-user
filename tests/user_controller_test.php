@@ -26,11 +26,25 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
+
 use local_user\helper\testhelper;
 
 require_once($CFG->dirroot . '/local/mentor_core/classes/controllers/front_controller.php');
 
 class local_user_controller_testcase extends advanced_testcase {
+    private moodle_database $db;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->resetAfterTest(true);
+        $this->reset_singletons();
+
+        global $DB;
+        $this->db = $DB;
+    }
+
     /**
      * Reset the singletons
      *
@@ -62,8 +76,6 @@ class local_user_controller_testcase extends advanced_testcase {
     public function test_set_user_preference() {
         global $DB, $USER;
 
-        $this->resetAfterTest(true);
-        $this->reset_singletons();
         self::setAdminUser();
 
         testhelper::create_default_entity($this);
