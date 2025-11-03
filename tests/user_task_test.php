@@ -70,8 +70,7 @@ class local_user_task_testcase extends advanced_testcase
             self::getDataGenerator()->enrol_user($userenrol->id, $session->id, 'participant');
         }
 
-        $externaleuserrole = $this->db->get_record('role', ['shortname' => 'utilisateurexterne']);
-        $result = $this->dbi->inactive_enrolment_external_users_query("NOT IN ('cohort')", [], $externaleuserrole->id, '30 days');
+        $result = $this->dbi->inactive_enrolment_external_users(['cohort'], $CFG->time_before_delete);
 
         self::assertCount(1, $result);
 

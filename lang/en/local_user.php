@@ -112,6 +112,19 @@ Pour plus de détails, veuillez consulter la <a href="{$a->faqurl}">FAQ</a>.';
 
 $string['task_never_logged_user_deleted'] = 'Suppression de comptes utilisateurs jamais connectés - Supression';
 $string['task_inactive_enrolment_external_user_deleted'] = 'Suppression des comptes externes sans inscription depuis plus de 30 jours';
+$string['task_inactive_enrolment_external_user_reminder_email'] = 'Email de rappel pour les comptes externes sans inscription';
+$string['inactive_enrolment_external_user_reminder_email:subject'] = 'Mentor: Suppression de votre compte utilisateur externe';
+$string['inactive_enrolment_external_user_reminder_email:messagetext'] = 'Bonjour {$a->firstname} {$a->lastname},
+
+Votre compte sur la plateforme interministérielle de formation Mentor est basé sur une adresse de messagerie non reconnue comme celle d\'un partenaire officiel du programme Mentor. Ce compte ne permet donc pas de consulter notre offre de formation.
+
+Comme vous n\'êtes inscrit à aucun contenu de formation, ce compte sera supprimé dans 30 jours.
+
+Si vous êtes bien un agent de la fonction publique d\'État mais que votre compte Mentor n\'est pas lié à votre adresse de messagerie professionnelle. Vous pouvez modifier votre profil en toute autonomie en cliquant sur le lien suivant : https://mentor.gouv.fr/user/profile.php
+
+Si vous estimez que votre adresse devrait être reconnue comme légitime car vous faites partie de la fonction publique d\'État, vous devez alors prendre contact avec le représentant Mentor de votre ministère de tutelle pour clarifier la situation (https://mentor.gouv.fr/local/staticpage/view.php?page=contact).
+
+Si vous souhaitez connaître les domaines de messagerie autorisés sur la plateforme Mentor, vous pouvez consulter la liste en bas de cette page : https://mentor.gouv.fr/local/staticpage/view.php?page=ensavoirplus';
 
 $string['task_suspended_user_deleted'] = 'Suppression de comptes utilisateurs suspendus';
 

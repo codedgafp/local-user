@@ -30,11 +30,9 @@ class inactive_enrolment_external_user_deleted extends \core\task\scheduled_task
 
     public function execute():  void
     {
-        global $DB;
+        global $DB, $CFG;
 
-        $externaleuserrole = $DB->get_record('role', ['shortname' => 'utilisateurexterne']);
-
-        $users = $this->dbi->inactive_enrolment_external_users(['cohort'], $externaleuserrole->id, '30 days');
+        $users = $this->dbi->inactive_enrolment_external_users(['cohort'], $CFG->time_before_delete);
 
         $noerror = local_user_deleted_users_for_task($users);
 

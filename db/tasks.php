@@ -63,6 +63,15 @@ $tasks = [
         'month' => '*',
     ],
     [
+        'classname' => 'local_user\task\inactive_enrolment_external_user_reminder_email',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '7',
+        'day' => '3',
+        'dayofweek' => '*',
+        'month' => '*',
+    ],
+    [
         'classname' => 'local_user\task\suspended_user_deleted',
         'blocking' => 0,
         'minute' => '0',

@@ -26,57 +26,59 @@ class local_user_database_interface
      * @param string $timelimite '30 days'
      * @return array
      */
-    public function inactive_enrolment_external_users(array $enrolcohortlist, int $externaluseroleid, string $timelimite): array
+    public function inactive_enrolment_external_users(array $enrolcohortlist, string $timelimite = ""): array
     {
-        global $DB;
+        $externaluserrole = $this->db->get_record('role', ['shortname' => 'utilisateurexterne'], 'id');
 
-        [$inclause, $paramsinclause] = $DB->get_in_or_equal(
+        [$inclause, $params] = $this->db->get_in_or_equal(
             items: $enrolcohortlist,
             type: SQL_PARAMS_NAMED,
             equal: false
         );
 
-        $inactiveenrolextusers = $this->inactive_enrolment_external_users_query($inclause, $paramsinclause, $externaluseroleid, $timelimite);
-
-        return $inactiveenrolextusers;
-    }
-
-    /**
-     * Query to get all external users that have been inactive for time
-     * 
-     * @param string $inclause IN or NOT IN ('cohort', 'program', ...)
-     * @param array $params Don't forget IN clause params
-     * @param int $externaluseroleid
-     * @param string $timelimite '30 days'
-     * @return array
-     */
-    public function inactive_enrolment_external_users_query(string $inclause, array $params, int $externaluseroleid, string $timelimite): array
-    {
-        global $DB;
-
-        $sql = "
-            SELECT
-                u.id,
-                u.username,
-                u.auth,
-                u.email
-            FROM {user} u
-            INNER JOIN {role_assignments} ra
-                ON u.id = ra.userid
-                AND ra.roleid = :roleid
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM {user_enrolments} ue 
-                INNER JOIN {enrol} e 
-                    ON ue.enrolid = e.id 
-                    AND e.enrol $inclause
-                WHERE ue.userid = u.id 
-            ) 
-            AND TO_TIMESTAMP(u.timecreated) + INTERVAL '$timelimite' < CURRENT_DATE
+        $sql = "SELECT
+                    u.id,
+                    u.username,
+                    u.auth,
+                    u.email,
+                    u.firstname,
+                    u.lastname
+                FROM {user} u
+                INNER JOIN {role_assignments} ra
+                    ON u.id = ra.userid
+                    AND ra.roleid = :roleid
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM {user_enrolments} ue 
+                    INNER JOIN {enrol} e 
+                        ON ue.enrolid = e.id 
+                        AND e.enrol $inclause
+                    WHERE ue.userid = u.id 
+                )
+                AND TO_TIMESTAMP(u.timecreated) + INTERVAL '$timelimite' < CURRENT_DATE
         ";
 
-        $params['roleid'] = $externaluseroleid;
+        $params['roleid'] = $externaluserrole->id;
 
-        return $DB->get_records_sql($sql, $params);
+        return $this->db->get_records_sql($sql, $params);
+    }
+
+    public function last_user_enrolment_deleted_record($userid)
+    {
+        $sql = "SELECT id, timecreated
+                FROM {logstore_standard_log}
+                WHERE eventname = :eventname
+                AND action = 'deleted'
+                AND relateduserid = :userid
+                ORDER BY timecreated DESC
+                LIMIT 1
+            ";
+
+        $params = [
+            'eventname' => '\core\event\user_enrolment_deleted',
+            'userid' => $userid
+        ];
+
+        return $this->db->get_record_sql($sql, $params);
     }
 }
