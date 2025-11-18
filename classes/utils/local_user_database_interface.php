@@ -2,6 +2,8 @@
 
 namespace local_user\utils;
 
+use moodle_database;
+
 defined('MOODLE_INTERNAL') || die();
 
 class local_user_database_interface
@@ -11,11 +13,11 @@ class local_user_database_interface
      */
     protected $db;
 
-    public function __construct()
+    public function __construct(?moodle_database $db = null)
     {
         global $DB;
 
-        $this->db = $DB;
+        $this->db = $db ?? $DB;
     }
 
     /**
@@ -26,7 +28,7 @@ class local_user_database_interface
      * @param string $timelimite '30 days'
      * @return array
      */
-    public function inactive_enrolment_external_users(array $enrolcohortlist, string $timelimite = ""): array
+    public function inactive_enrolment_external_users(array $enrolcohortlist, string $timelimite = ''): array
     {
         $externaluserrole = $this->db->get_record('role', ['shortname' => 'utilisateurexterne'], 'id');
 
@@ -42,7 +44,8 @@ class local_user_database_interface
                     u.auth,
                     u.email,
                     u.firstname,
-                    u.lastname
+                    u.lastname,
+                    u.timecreated
                 FROM {user} u
                 INNER JOIN {role_assignments} ra
                     ON u.id = ra.userid
@@ -55,15 +58,22 @@ class local_user_database_interface
                         AND e.enrol $inclause
                     WHERE ue.userid = u.id 
                 )
-                AND TO_TIMESTAMP(u.timecreated) + INTERVAL '$timelimite' < CURRENT_DATE
-        ";
+            ";
+
+        if ($timelimite !== '')
+            $sql .= "AND TO_TIMESTAMP(u.timecreated) + INTERVAL '$timelimite' < CURRENT_DATE";
 
         $params['roleid'] = $externaluserrole->id;
 
         return $this->db->get_records_sql($sql, $params);
     }
 
-    public function last_user_enrolment_deleted_record($userid)
+    /**
+     * Get the last user deleted enrolment
+     * 
+     * @param mixed $userid
+     */
+    public function last_user_enrolment_deleted_record(int $userid): mixed
     {
         $sql = "SELECT id, timecreated
                 FROM {logstore_standard_log}

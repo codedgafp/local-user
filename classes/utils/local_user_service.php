@@ -21,24 +21,30 @@ class local_user_service
      * If the user_enrolment_deleted timecreated is before the today's date - given time, it return true,
      * else it return false.
      * 
-     * @param mixed $userid
-     * @param mixed $timeinsecond Seven days = 604800
+     * @param int $userid
+     * @param int $useridcreationdate
+     * @param int $timeinsecond
      * @return bool
      */
-    public function user_last_enrolment_deleted_time_diff($userid, $timeinsecond): bool
+    public function user_last_enrolment_deleted_time_diff(int $userid, int $useridcreationdate, int $timeinsecond): bool
     {
+        $datenow = time();
+
         $lastuserenrolmentdeleted = $this->dbi->last_user_enrolment_deleted_record($userid);
 
         if ($lastuserenrolmentdeleted !== false) {
-            $datenow = time();
             $lastuserenrolmentdeletedtime = intval($lastuserenrolmentdeleted->timecreated);
 
             $timediff = $datenow - $lastuserenrolmentdeletedtime;
 
-            if ($timediff < $timeinsecond) {
+            if ($timediff > $timeinsecond)
                 return true;
-            }
         }
+
+        $datecreationdiff = $datenow - $useridcreationdate;
+
+        if ($datecreationdiff > $timeinsecond)
+            return true;
 
         return false;
     }

@@ -40,7 +40,7 @@ class inactive_enrolment_external_user_reminder_email extends \core\task\schedul
     {
         global $DB, $CFG;
 
-        $inactiveusers = $this->dbi->inactive_enrolment_external_users(['cohort'], $CFG->time_before_delete);
+        $inactiveusers = $this->dbi->inactive_enrolment_external_users(['cohort']);
 
         if (empty($inactiveusers))
             return;
@@ -49,10 +49,8 @@ class inactive_enrolment_external_user_reminder_email extends \core\task\schedul
 
         $emailsubject = get_string('inactive_enrolment_external_user_reminder_email:subject', 'local_user');
 
-        $timebeforenotification = $CFG->time_before_notification ; // seven days in second
-
         foreach ($inactiveusers as $user) {
-            if ($this->localuserservice->user_last_enrolment_deleted_time_diff($user->id, $timebeforenotification))
+            if ($this->localuserservice->user_last_enrolment_deleted_time_diff($user->id, $user->timecreated, $CFG->time_before_notification))
                 continue;
 
             $emailmessagetextcontent = [
