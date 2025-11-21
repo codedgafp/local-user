@@ -18,15 +18,15 @@ class local_user_service
 
     /**
      * Get the last user_enrolment_deleted event timecreated and compare to today date.
-     * If the user_enrolment_deleted timecreated is before the today's date - given time, it return true,
-     * else it return false.
+     * If the user_enrolment_deleted timecreated is after the given time, the user can
+     * be deleted.
      * 
      * @param int $userid
      * @param int $useridcreationdate
      * @param int $timeinsecond
      * @return bool
      */
-    public function user_last_enrolment_deleted_time_diff(int $userid, int $useridcreationdate, int $timeinsecond): bool
+    public function user_can_be_deleted_checked_by_time(int $userid, int $useridcreationdate, int $timeinsecond): bool
     {
         $datenow = time();
 
@@ -38,14 +38,14 @@ class local_user_service
             $timediff = $datenow - $lastuserenrolmentdeletedtime;
 
             if ($timediff > $timeinsecond)
-                return true;
+                return false;
         }
 
         $datecreationdiff = $datenow - $useridcreationdate;
 
         if ($datecreationdiff > $timeinsecond)
-            return true;
+            return false;
 
-        return false;
+        return true;
     }
 }

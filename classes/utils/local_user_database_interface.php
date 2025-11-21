@@ -58,7 +58,8 @@ class local_user_database_interface
                         AND e.enrol $inclause
                     WHERE ue.userid = u.id 
                 )
-            ";
+                AND u.username NOT IN ('admin', 'guest')
+            "; // les utilisateurs 'admin' et 'guest' ne doivent pas être supprimé
 
         if ($timelimite !== '')
             $sql .= "AND TO_TIMESTAMP(u.timecreated) + INTERVAL '$timelimite' < CURRENT_DATE";
