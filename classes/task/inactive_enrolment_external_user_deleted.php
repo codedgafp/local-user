@@ -42,7 +42,8 @@ class inactive_enrolment_external_user_deleted extends \core\task\scheduled_task
         $users = $this->dbi->inactive_enrolment_external_users(['cohort'], $CFG->time_before_delete);
 
         $userstodelete = array_filter($users, function($user) use ($CFG): bool {
-            return $this->luservice->user_can_be_deleted_checked_by_time($user->id, $user->timecreated, strtotime($CFG->time_before_delete));
+            $timeinsecond = strtotime($CFG->time_before_delete) - time();
+            return $this->luservice->user_can_be_deleted_checked_by_time($user->id, $user->timecreated, $timeinsecond);
         });
 
         $noerror = local_user_deleted_users_for_task($userstodelete);
