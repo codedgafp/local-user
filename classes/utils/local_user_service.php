@@ -37,14 +37,18 @@ class local_user_service
 
             $timediff = $datenow - $lastuserenrolmentdeletedtime;
 
-            if ($timediff > $timeinsecond)
+            if ($timediff < $timeinsecond) {
                 return false;
+            }
+
+            return true;
         }
 
         $datecreationdiff = $datenow - $useridcreationdate;
 
-        if ($datecreationdiff > $timeinsecond)
+        if ($datecreationdiff < $timeinsecond) {
             return false;
+        }
 
         return true;
     }

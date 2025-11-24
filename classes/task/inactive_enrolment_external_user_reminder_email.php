@@ -50,7 +50,7 @@ class inactive_enrolment_external_user_reminder_email extends \core\task\schedul
         $emailsubject = get_string('inactive_enrolment_external_user_reminder_email:subject', 'local_user');
 
         foreach ($inactiveusers as $user) {
-            if (!$this->localuserservice->user_can_be_deleted_checked_by_time($user->id, $user->timecreated, $CFG->time_before_notification))
+            if ($this->localuserservice->user_can_be_deleted_checked_by_time($user->id, $user->timecreated, $CFG->time_before_notification))
                 continue;
 
             $emailmessagetextcontent = [
