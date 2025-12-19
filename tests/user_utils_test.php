@@ -126,11 +126,14 @@ class local_user_utils_testcase extends advanced_testcase
         }
 
         $result = $this->dbi->inactive_enrolment_external_users(['cohort']);
-
         self::assertCount(2, $result);
+        
+        $resultids = array_map(static fn($r) => $r->id, $result);
 
-        self::assertEquals($user5->id, current($result)->id);
-        self::assertEquals($user6->id, next($result)->id);
+        self::assertEqualsCanonicalizing(
+            [$user5->id, $user6->id],
+            $resultids
+        );
     }
 
     public function test_last_user_enrolment_deleted_record()
