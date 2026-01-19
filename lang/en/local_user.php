@@ -120,11 +120,11 @@ Votre compte sur la plateforme interministérielle de formation Mentor est basé
 
 Comme vous n\'êtes inscrit à aucun contenu de formation, ce compte sera supprimé dans 30 jours.
 
-Si vous êtes bien un agent de la fonction publique d\'État mais que votre compte Mentor n\'est pas lié à votre adresse de messagerie professionnelle. Vous pouvez modifier votre profil en toute autonomie en cliquant sur le lien suivant : https://mentor.gouv.fr/user/profile.php
+Si vous êtes bien un agent de la fonction publique d\'État mais que votre compte Mentor n\'est pas lié à votre adresse de messagerie professionnelle. Vous pouvez modifier votre profil en toute autonomie en cliquant sur le lien suivant : <a href="https://mentor.gouv.fr/user/profile.php">https://mentor.gouv.fr/user/profile.php</a>
 
-Si vous estimez que votre adresse devrait être reconnue comme légitime car vous faites partie de la fonction publique d\'État, vous devez alors prendre contact avec le représentant Mentor de votre ministère de tutelle pour clarifier la situation (https://mentor.gouv.fr/local/staticpage/view.php?page=contact).
+Si vous estimez que votre adresse devrait être reconnue comme légitime car vous faites partie de la fonction publique d\'État, vous devez alors prendre contact avec le représentant Mentor de votre ministère de tutelle pour clarifier la situation (<a href="https://mentor.gouv.fr/local/staticpage/view.php?page=contact">https://mentor.gouv.fr/local/staticpage/view.php?page=contact</a>).
 
-Si vous souhaitez connaître les domaines de messagerie autorisés sur la plateforme Mentor, vous pouvez consulter la liste en bas de cette page : https://mentor.gouv.fr/local/staticpage/view.php?page=ensavoirplus';
+Si vous souhaitez connaître les domaines de messagerie autorisés sur la plateforme Mentor, vous pouvez consulter la liste en bas de cette page : <a href="https://mentor.gouv.fr/local/staticpage/view.php?page=ensavoirplus">https://mentor.gouv.fr/local/staticpage/view.php?page=ensavoirplus</a>';
 
 $string['task_suspended_user_deleted'] = 'Suppression de comptes utilisateurs suspendus';
 

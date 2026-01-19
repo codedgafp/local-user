@@ -58,7 +58,8 @@ class inactive_enrolment_external_user_reminder_email extends \core\task\schedul
                 "lastname" => $user->lastname,
             ];
             $emailmessagetext = get_string('inactive_enrolment_external_user_reminder_email:messagetext', 'local_user', $emailmessagetextcontent);
-            $emailmessagehtml = text_to_html($emailmessagetext, true, true);
+            $emailmessagehtml = text_to_html($emailmessagetext, false, false, true);
+            $user->mailformat = 1;  // Always send HTML version.
 
             try {
                 email_to_user($user, $supportuser, $emailsubject, $emailmessagetext, $emailmessagehtml);
