@@ -11,9 +11,9 @@ class local_user_service
      */
     protected $dbi;
 
-    public function __construct()
+    public function __construct(?local_user_database_interface $dbi = null)
     {
-        $this->dbi = new local_user_database_interface;
+        $this->dbi = $dbi ?? new local_user_database_interface;
     }
 
     /**
@@ -24,9 +24,10 @@ class local_user_service
      * @param int $userid
      * @param int $useridcreationdate
      * @param int $timeinsecond
+     * @param int|null $lastnotifytime
      * @return bool
      */
-    public function user_can_be_deleted_checked_by_time(int $userid, int $useridcreationdate, int $timeinsecond): bool
+    public function user_can_be_deleted_checked_by_time(int $userid, int $useridcreationdate, int $timeinsecond, ?int $lastnotifytime = null): bool
     {
         $datenow = time();
 
@@ -34,22 +35,23 @@ class local_user_service
 
         if ($lastuserenrolmentdeleted !== false) {
             $lastuserenrolmentdeletedtime = intval($lastuserenrolmentdeleted->timecreated);
-
             $timediff = $datenow - $lastuserenrolmentdeletedtime;
 
-            if ($timediff < $timeinsecond) {
-                return false;
+            if ($lastnotifytime === null) {
+                return $timediff >= $timeinsecond;
             }
 
-            return true;
+            $lasttimediff = $lastnotifytime - $lastuserenrolmentdeletedtime;
+            return $lasttimediff < $timeinsecond && $timediff >= $timeinsecond;
         }
 
         $datecreationdiff = $datenow - $useridcreationdate;
 
-        if ($datecreationdiff < $timeinsecond) {
-            return false;
+        if ($lastnotifytime === null) {
+            return $datecreationdiff >= $timeinsecond;
         }
 
-        return true;
+        $lastimedatecreationdiff = $lastnotifytime - $useridcreationdate;
+        return $lastimedatecreationdiff < $timeinsecond && $datecreationdiff >= $timeinsecond;
     }
 }
